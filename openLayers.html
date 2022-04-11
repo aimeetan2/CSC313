@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
+    <style>
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
+    <title>OpenLayers example</title>
+  </head>
+  <body>
+    <h2>Aimee's Map</h2>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+      // create basic map
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          // default centered at Cal Poly's location
+          center: ol.proj.fromLonLat([-120.660535, 35.300416]),
+          zoom: 2.1
+        })
+      });
+      // location and icon arrays
+      var locations = [[ol.proj.fromLonLat([-120.670375, 35.272506]), 'San Luis Obispo, CA'],
+        [ol.proj.fromLonLat([-122.693514, 42.191640]), 'Ashland, OR'],
+        [ol.proj.fromLonLat([-122.235277, 37.758905]), 'Oakland, CA'],
+        [ol.proj.fromLonLat([-118.412316, 33.854678]), 'Redondo Beach, CA'],
+        [ol.proj.fromLonLat([77.144795, 28.563506]), 'New Delhi'],
+        [ol.proj.fromLonLat([-105.051482, 39.946164]), 'Broomfield, CO']];
+      var icons = ['https://openlayers.org/en/latest/examples/data/dot.png',
+        'https://openlayers.org/en/latest/examples/data/geolocation_marker.png',
+        'https://openlayers.org/en/latest/examples/data/dot.png',
+        'https://openlayers.org/en/latest/examples/data/dot.png',
+        'https://openlayers.org/en/latest/examples/data/icon.png',
+        'https://openlayers.org/en/latest/examples/data/geolocation_marker.png'];
+      // loop through, add all locations to the map with a marker and lable
+      for (let i = 0; i < locations.length; i++) {
+        var marker = new ol.layer.Vector({
+          source: new ol.source.Vector({
+            features: [
+              new ol.Feature({
+                  geometry: new ol.geom.Point(locations[i][0])
+                })
+            ]
+          }),
+          style: new ol.style.Style({
+            image: new ol.style.Icon({ 
+              scale: 0.5,
+              src: icons[i]
+            }),
+            text: new ol.style.Text({
+              font: 'bold 7px courier new',
+              fill: new ol.style.Fill({
+                color: 'red'
+              }),
+              text: locations[i][1],
+              textAlign: 'left',
+              offsetX: 8
+            })
+          }),
+        });
+        map.addLayer(marker);
+      }
+
+    </script>
+  </body>
+</html>
